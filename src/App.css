@@ -8,6 +8,7 @@ body {
 
 #connect-four {
   display: flex;
+  transform: rotate(90deg);
   padding: 1rem;
   background-color: darkblue
 }
