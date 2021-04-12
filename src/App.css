@@ -1,28 +1,24 @@
 body {
+  display: flex;
+  justify-content: center;
   margin: auto;
   width: 50%;
   text-align: center;
 }
 
 #connect-four {
-  display: inline-block;
+  display: flex;
   padding: 1rem;
   background-color: darkblue
 }
 
 #connect-four .row .cell {
-  display: inline-block;
+  display: flex;
   width: 3rem;
   height: 3rem;
   border: 2px solid black;
   border-radius: 50%;
   cursor: pointer;
-}
-
-#connect-four {
-  display: inline-block;
-  padding: 1rem;
-  background-color: darkblue
 }
 
 #restart-text:hover {
