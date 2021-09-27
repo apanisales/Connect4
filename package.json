@@ -1,20 +1,25 @@
 {
-  "name": "my-app",
+  "name": "connect4",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:8000",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.10",
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^13.1.1",
+    "concurrently": "^6.0.2",
     "cross-env": "^7.0.3",
+    "express": "^4.17.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-modal": "^3.12.1",
     "react-scripts": "4.0.3",
+    "socket.io": "^4.0.1",
+    "socket.io-client": "^4.0.1",
     "web-vitals": "^1.1.1"
   },
   "scripts": {
-    "start": "cross-env BROWSER=chrome react-scripts start",
+    "start": "concurrently \"node server.js\" \"cross-env BROWSER=chrome react-scripts start\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

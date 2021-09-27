@@ -1,8 +1,7 @@
 body {
   display: flex;
-  justify-content: center;
   margin: auto;
-  width: 50%;
+  justify-content: center;
   text-align: center;
 }
 
@@ -10,7 +9,11 @@ body {
   display: flex;
   transform: rotate(90deg);
   padding: 1rem;
-  background-color: darkblue
+  background-color: darkblue;
+  border: 2px solid black;
+  margin-right: auto;
+  margin-left: auto;
+  width: min-content;
 }
 
 #connect-four .row .cell {

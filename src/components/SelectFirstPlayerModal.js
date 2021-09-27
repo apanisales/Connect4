@@ -9,7 +9,6 @@ export default function SelectFirstPlayerModal(props) {
     const [selectedOption, setSelectedOption] = useState(null);
 
     function getStartingPlayerRandomly() {
-        console.log("meep");
         let players = ["Red", "Yellow"];
         let random = Math.floor(Math.random() * players.length);
         return players[random];
