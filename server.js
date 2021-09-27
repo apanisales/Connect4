@@ -97,82 +97,114 @@ function calculateWinner(grid, currentPlayer) {
   }
 
 io.on("connection", socket => {
-    socket.emit("get user id", socket.id);
+  socket.emit("get user id", socket.id);
 
-    socket.on("join game", body => {
-        let availableGameIndex = games.findIndex(game => game.player2 === undefined && game.isValidGame);
-        let joinedGame = null;        
-        if (availableGameIndex > -1) {
-            games[availableGameIndex].player2 = body.id;
-            joinedGame = games[availableGameIndex];
-            joinedGame.gameState.currentPlayer = selectColorRandomly();
-            joinedGame.player1Color = selectColorRandomly();
-            joinedGame.player2Color = (joinedGame.player1Color === "Red") ? "Yellow" : "Red";
-        } else {
-            let newGame = { 
-                player1: body.id,
-                player2: undefined,
-                player1Color: undefined,
-                player2Color: undefined,
-                gameState: createInitialState(),
-                gameCode: generateGameCode(),
-                isValidGame: true // false when one player leaves the game
-            }
-            games.push(newGame);
-            joinedGame = newGame;
-        }
-        socket.join(joinedGame.gameCode);
-        socket.emit("joined game", joinedGame);
-        if (joinedGame.player1 !== undefined && joinedGame.player2 !== undefined) {
-            socket.to(joinedGame.gameCode).emit("game is ready", joinedGame);
-        }
-    });
-
-    socket.on("player made move", body => {
-        let game = games.find(game => game.gameCode === body.gameCode);
-        let index = games.indexOf(game);
-
-        const nextGrid = [...body.grid];
-        for (let row = 5; row >= 0; row--) {
-          for (let col = 6; col >= 0; col--) {
-            if (nextGrid[row][col].includes("Hover")) {
-              nextGrid[row][col] = nextGrid[row][col].replace('Hover', '');
-            }
+  socket.on("join game", body => {
+      let availableGameIndex = games.findIndex(game => game.player2 === undefined && game.isValidGame);
+      let joinedGame = null;        
+      if (availableGameIndex > -1) {
+          games[availableGameIndex].player2 = body.id;
+          joinedGame = games[availableGameIndex];
+          joinedGame.gameState.currentPlayer = selectColorRandomly();
+          joinedGame.player1Color = selectColorRandomly();
+          joinedGame.player2Color = (joinedGame.player1Color === "Red") ? "Yellow" : "Red";
+      } else {
+          let newGame = { 
+              player1: body.id,
+              player2: undefined,
+              player1Color: undefined,
+              player2Color: undefined,
+              gameState: createInitialState(),
+              gameCode: generateGameCode(),
+              isValidGame: true // false when one player leaves the game
           }
-        }
+          games.push(newGame);
+          joinedGame = newGame;
+      }
+      socket.join(joinedGame.gameCode);
+      socket.emit("joined game", joinedGame);
+      if (joinedGame.player1 !== undefined && joinedGame.player2 !== undefined) {
+          socket.to(joinedGame.gameCode).emit("game is ready", joinedGame);
+      }
+  });
 
-        game.gameState.grid = nextGrid;
-        game.gameState.winner = calculateWinner(game.gameState.grid, game.gameState.currentPlayer);
-        game.gameState.currentPlayer = (game.gameState.currentPlayer === 'Red') ? 'Yellow' : 'Red';
-        games[index] = game;
-        io.in(game.gameCode).emit("player made move", game);
-    });
-
-    socket.on("player left game", body => {
+  socket.on("player made move", body => {
       let game = games.find(game => game.gameCode === body.gameCode);
       let index = games.indexOf(game);
-      let playerLeavingWasPlayer1 = (body.userId === game.player1);
-      game.isValidGame = false;
 
-      if (playerLeavingWasPlayer1) {
-        game.player1 = undefined;
-      } else {
-        game.player2 = undefined;
+      const nextGrid = [...body.grid];
+      for (let row = 5; row >= 0; row--) {
+        for (let col = 6; col >= 0; col--) {
+          if (nextGrid[row][col].includes("Hover")) {
+            nextGrid[row][col] = nextGrid[row][col].replace('Hover', '');
+          }
+        }
       }
 
-      if (game.player1 === undefined && game.player2 === undefined) {
-        games.splice(index, 1);
-      } else {
-        games[index] = game;
-      }
-      
-      io.in(body.userId).emit("player left game", null);
+      game.gameState.grid = nextGrid;
+      game.gameState.winner = calculateWinner(game.gameState.grid, game.gameState.currentPlayer);
+      game.gameState.currentPlayer = (game.gameState.currentPlayer === 'Red') ? 'Yellow' : 'Red';
+      games[index] = game;
+      io.in(game.gameCode).emit("player made move", game);
+  });
 
-      if (playerLeavingWasPlayer1) {
-        io.in(game.player2).emit("player left game", game);
-      } else {
-        io.in(game.player1).emit("player left game", game);
-      }
+  socket.on("player left game", body => {
+    let game = games.find(game => game.gameCode === body.gameCode);
+    let index = games.indexOf(game);
+    let playerLeavingWasPlayer1 = (body.userId === game.player1);
+    game.isValidGame = false;
+
+    if (playerLeavingWasPlayer1) {
+      game.player1 = undefined;
+    } else {
+      game.player2 = undefined;
+    }
+
+    if (game.player1 === undefined && game.player2 === undefined) {
+      games.splice(index, 1);
+    } else {
+      games[index] = game;
+    }
+    
+    io.in(body.userId).emit("player left game", null);
+
+    if (playerLeavingWasPlayer1) {
+      io.in(game.player2).emit("player left game", game);
+    } else {
+      io.in(game.player1).emit("player left game", game);
+    }
+  });
+
+  socket.on("disconnect", body => {
+    let game = games.find(game => game.player1 === socket.id || game.player2 === socket.id);
+    let index = games.indexOf(game);
+
+    if (index === -1) {
+      return; // player was not in a game
+    }
+
+    let playerLeavingWasPlayer1 = (socket.id === game.player1);
+    game.isValidGame = false;
+
+    if (playerLeavingWasPlayer1) {
+      game.player1 = undefined;
+    } else {
+      game.player2 = undefined;
+    }
+
+    if (game.player1 === undefined && game.player2 === undefined) {
+      games.splice(index, 1);
+    } else {
+      games[index] = game;
+    }
+    
+    io.in(socket.id).emit("player left game", null);
+
+    if (playerLeavingWasPlayer1) {
+      io.in(game.player2).emit("player left game", game);
+    } else {
+      io.in(game.player1).emit("player left game", game);
+    }
   });
 })
 
