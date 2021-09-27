@@ -1,94 +1,114 @@
-import React, {useReducer} from 'react';
+import React, {useState} from 'react';
 import '../App.css';
-import { createInitialState, handlePlayerMove, highlightColumn, unHighlightColumn, checkIfColumnIsFree, setFirstPlayer} from '../GameLogic';
-import SelectFirstPlayerModal from './SelectFirstPlayerModal';
-
-const initialState = createInitialState();
-
-function reducer(state = initialState, action) {
-  switch(action.type) {
-    case 'CLICK_COLUMN':
-      return handlePlayerMove(state, action.column);
-    case 'HIGHLIGHT_COLUMN':
-      return highlightColumn(state, action.column);
-    case 'UNHIGHLIGHT_COLUMN':
-      return unHighlightColumn(state, action.column);
-    case 'SELECT_FIRST_PLAYER':
-      return setFirstPlayer(state, action.player);
-    case 'RESTART':
-      return createInitialState();
-    default:
-      return state;
-  }
-}
-
-function useConnectFour() {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  
-  const clickColumn = (column) => {
-    dispatch({
-      type: 'CLICK_COLUMN',
-      column
-    })
-  }
-
-  const restart = () => {
-    dispatch({
-      type: 'RESTART'
-    })
-  }
-
-  const highlightHoveredColumn = (column) => {
-    dispatch({
-      type: 'HIGHLIGHT_COLUMN',
-      column
-    })
-  }
-
-  const unHighlightHoveredColumn = (column) => {
-    dispatch({
-      type: 'UNHIGHLIGHT_COLUMN',
-      column
-    })
-  }
-
-  const selectFirstPlayer = (player) => {
-    dispatch({
-      type: 'SELECT_FIRST_PLAYER',
-      player
-    })
-  }
-
-  return [state, clickColumn, restart, highlightHoveredColumn, unHighlightHoveredColumn, selectFirstPlayer]
-}
-
-function getPlayerText(player) {
-  return <span style={{ color: (player === "Yellow") ? "#FFD300" : player}}>{player}</span>;
-}
 
 export default function Game(props) {
-  const [state, clickColumn, restart, highlightHoveredColumn, unHighlightHoveredColumn, selectFirstPlayer] = useConnectFour();
+  const [grid, setGrid] = useState(props.game.gameState.grid);
+  const userColor = getUserColor();
+  const currentPlayer = props.game.gameState.currentPlayer;
+  const winner = props.game.gameState.winner;
+  const userColorText = (userColor !== null) ? <h1> You are the {getPlayerText(userColor)} player </h1> : <h1> Waiting for second player to join...</h1>;
+  const winnerOrPlayerTurnText = (winner) ? <h1>{getPlayerText(winner)} player wins!</h1> : <h1> {getPlayerText(currentPlayer)} player's turn </h1>;
+  console.log(props.game);
+
+  if (grid !== props.game.gameState.grid) {
+    setGrid(props.game.gameState.grid);
+  }
+
+  function getUserColor() {
+    if (props.game.player2 !== undefined) {
+      if (props.userId === props.game.player1) {
+        return props.game.player1Color;
+      } else {
+        return props.game.player2Color;
+      }
+    }
+    return null;
+  }
+
+  function getPlayerText(player) {
+    return <span style={{ color: (player === "Yellow") ? "#FFD300" : player}}>{player}</span>;
+  }
+  
+  function highlightColumn(col) {
+    const nextGrid = [...grid];
+  
+    for (let row = 5; row >= 0; row--) {
+      if (nextGrid[row][col].includes("White") && !nextGrid[row][col].includes("Hover")) {
+        nextGrid[row][col] += "Hover";
+      }
+    }
+
+    return nextGrid;
+  }
+  
+  function unHighlightColumn(col) {
+    const nextGrid = [...grid];
+    
+    for (let row = 5; row >= 0; row--) {
+      if (nextGrid[row][col].includes("Hover")) {
+        nextGrid[row][col] = nextGrid[row][col].replace('Hover', '');
+      }
+    }
+  
+    return nextGrid;
+  }
+  
+  function checkIfColumnIsFree(col) {
+    for (let row = 5; row >= 0; row--) {
+      if (grid[row][col].includes("White")) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function handlePlayerMove(col) {
+    const nextGrid = [...grid];  
+    for (let row = 5; row >= 0; row--) {
+      if (nextGrid[row][col].includes('White')) {
+        nextGrid[row][col] = currentPlayer;
+        break;
+      }
+    }
+
+    let obj = {
+      gameCode: props.game.gameCode,
+      grid: nextGrid
+    }
+
+    props.socketRef.current.emit("player made move", obj);
+  }
+
+  function leaveGame() {
+    let obj = {
+      gameCode: props.game.gameCode,
+      userId: props.userId
+    }
+
+    props.socketRef.current.emit("player left game", obj);
+  }
 
   return (
     <>
-      <h1> Connect Four</h1>
 
-      {state.winner ? <h1>{getPlayerText(state.winner)} player wins!</h1> : <h1> {getPlayerText(state.currentPlayer)} player's turn </h1>}
+      {props.game.isValidGame ? null : <h1> The other player left the game! </h1>}
+
+      {props.game.isValidGame ? userColorText : null}
+    
+      {props.game.isValidGame && props.game.player2 !== undefined ? winnerOrPlayerTurnText : null}
       
-      {state.currentPlayer === null && <SelectFirstPlayerModal isOpen={state.currentPlayer === null} selectFirstPlayer={selectFirstPlayer}/> }
-
       <section id="connect-four">
         {
-          state.grid.map((row, rowIdx) => (
+          grid.map((row, rowIdx) => (
             <div className="row" key={rowIdx}>
               {row.map((col, colIdx) => (
                 <span
                   className="cell"
                   key={colIdx}
-                  onClick={() => !state.winner && checkIfColumnIsFree(state.grid, colIdx) && clickColumn(colIdx)}
-                  onMouseEnter={() => !state.winner && highlightHoveredColumn(colIdx)}
-                  onMouseLeave={() => !state.winner && unHighlightHoveredColumn(colIdx)}
-                  style={{backgroundColor: (state.grid[rowIdx][colIdx].includes("Hover")) ? "lightblue" : state.grid[rowIdx][colIdx]}}
+                  onClick={() => props.game.isValidGame && props.game.player2 && currentPlayer === userColor && !winner && checkIfColumnIsFree(colIdx) && handlePlayerMove(colIdx)}
+                  onMouseEnter={() => !winner && setGrid(highlightColumn(colIdx))}
+                  onMouseLeave={() => !winner && setGrid(unHighlightColumn(colIdx))}
+                  style={{backgroundColor: (grid[rowIdx][colIdx].includes("Hover")) ? "lightblue" : grid[rowIdx][colIdx]}}
                 >
                 </span>
               ))}
@@ -97,7 +117,7 @@ export default function Game(props) {
         }
       </section>
 
-      <h3 id="restart-text" onClick={() => restart()}>Click here to restart the game</h3>
+      <button onClick={() => leaveGame()}>Return to home page</button>
     </>
   );
 }
