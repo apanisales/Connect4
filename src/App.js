@@ -17,10 +17,7 @@ function App() {
   }, []);
 
   const joinGame = () => {
-    let obj = {
-      id: userId
-    };
-    socketRef.current.emit("join game", obj);
+    socketRef.current.emit("join game", null);
     socketRef.current.on("joined game", game => {
       setGame(game);
     });

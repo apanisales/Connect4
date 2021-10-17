@@ -8,7 +8,6 @@ export default function Game(props) {
   const winner = props.game.gameState.winner;
   const userColorText = (userColor !== null) ? <h1> You are the {getPlayerText(userColor)} player </h1> : <h1> Waiting for second player to join...</h1>;
   const winnerOrPlayerTurnText = (winner) ? <h1>{getPlayerText(winner)} player wins!</h1> : <h1> {getPlayerText(currentPlayer)} player's turn </h1>;
-  console.log(props.game);
 
   if (grid !== props.game.gameState.grid) {
     setGrid(props.game.gameState.grid);
@@ -72,7 +71,6 @@ export default function Game(props) {
     }
 
     let obj = {
-      gameCode: props.game.gameCode,
       grid: nextGrid
     }
 
@@ -80,12 +78,7 @@ export default function Game(props) {
   }
 
   function leaveGame() {
-    let obj = {
-      gameCode: props.game.gameCode,
-      userId: props.userId
-    }
-
-    props.socketRef.current.emit("player left game", obj);
+    props.socketRef.current.emit("player left game", null);
   }
 
   return (
