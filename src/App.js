@@ -47,7 +47,7 @@ function App() {
       {game === null && <button onClick={() => joinOnlineGame()}>Play online</button>}
       {game !== null && !game.isOnlineGame && <LocalGame/>}
       {game === null && <button onClick={() => setGame({isOnlineGame: false})}>Play locally</button>}
-      {game !== null && !game.isOnlineGame && <button id="home-button" onClick={() => setGame(null)}>Go to main menu</button>}
+      {game !== null && !game.isOnlineGame && <button onClick={() => setGame(null)}>Return to home page</button>}
     </>
   );
 }
