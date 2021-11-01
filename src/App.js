@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
-import Game from './components/Game';
+import OnlineGame from './components/OnlineGame';
+import LocalGame from './components/LocalGame';
 import io from "socket.io-client";
 
 function App() {
@@ -10,13 +11,12 @@ function App() {
 
   useEffect(() => {
     socketRef.current = io.connect('/');
-
     socketRef.current.on("get user id", id => {
       setUserId(id);
     });
   }, []);
 
-  const joinGame = () => {
+  const joinOnlineGame = () => {
     socketRef.current.emit("join game", null);
     socketRef.current.on("joined game", game => {
       setGame(game);
@@ -39,10 +39,15 @@ function App() {
     });
   }
   
+
   return (
     <>
-      <h1> Connect Four Online</h1>
-      {game !== null && socketRef.current !== undefined ? <Game userId={userId} game={game} socketRef={socketRef}/> : <button onClick={() => socketRef.current !== undefined && joinGame()}>Join game</button>}
+      <h1> Connect Four</h1>
+      {game !== null && game.isOnlineGame && <OnlineGame userId={userId} game={game} socketRef={socketRef}/>}
+      {game === null && <button onClick={() => joinOnlineGame()}>Play online</button>}
+      {game !== null && !game.isOnlineGame && <LocalGame/>}
+      {game === null && <button onClick={() => setGame({isOnlineGame: false})}>Play locally</button>}
+      {game !== null && !game.isOnlineGame && <button onClick={() => setGame(null)}>Return to home page</button>}
     </>
   );
 }

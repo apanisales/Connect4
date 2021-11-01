@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import '../App.css';
 
-export default function Game(props) {
+export default function OnlineGame(props) {
   const [grid, setGrid] = useState(props.game.gameState.grid);
   const userColor = getUserColor();
   const currentPlayer = props.game.gameState.currentPlayer;

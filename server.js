@@ -148,7 +148,8 @@ io.on("connection", socket => {
               player2Color: undefined,
               gameState: createInitialState(),
               gameCode: generateGameCode(),
-              isValidGame: true // false when one player leaves the game
+              isValidGame: true, // false when one player leaves the game
+              isOnlineGame: true
           }
           games.push(newGame);
           joinedGame = newGame;
