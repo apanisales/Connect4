@@ -66,13 +66,25 @@ function getPlayerText(player) {
   return <span style={{ color: (player === "Yellow") ? "#FFD300" : player}}>{player}</span>;
 }
 
+function getTurnOrTieOrWinnerRelatedText(state) {
+  if (state.winner) {
+      if (state.winner === "Tie") {
+        return <h1> The game is a tie! </h1>
+      } else { // There is a winner
+        return <h1>{getPlayerText(state.winner)} player wins!</h1>;
+      }
+  } else { // There is no winner yet
+    return <h1> {getPlayerText(state.currentPlayer)} player's turn </h1>;
+  }
+}
+
 export default function LocalGame(props) {
   const [state, clickColumn, restart, highlightHoveredColumn, unHighlightHoveredColumn, selectFirstPlayer] = useConnectFour();
 
   return (
     <>
-      {state.winner ? <h1>{getPlayerText(state.winner)} player wins!</h1> : <h1> {getPlayerText(state.currentPlayer)} player's turn </h1>}
-      
+      {getTurnOrTieOrWinnerRelatedText(state)}
+
       {state.currentPlayer === null && <SelectFirstPlayerModal isOpen={state.currentPlayer === null} selectFirstPlayer={selectFirstPlayer}/> }
 
       <section id="connect-four">

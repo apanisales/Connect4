@@ -7,7 +7,6 @@ export default function OnlineGame(props) {
   const currentPlayer = props.game.gameState.currentPlayer;
   const winner = props.game.gameState.winner;
   const userColorText = (userColor !== null) ? <h1> You are the {getPlayerText(userColor)} player </h1> : <h1> Waiting for second player to join...</h1>;
-  const winnerOrPlayerTurnText = (winner) ? <h1>{getPlayerText(winner)} player wins!</h1> : <h1> {getPlayerText(currentPlayer)} player's turn </h1>;
 
   if (grid !== props.game.gameState.grid) {
     setGrid(props.game.gameState.grid);
@@ -81,14 +80,25 @@ export default function OnlineGame(props) {
     props.socketRef.current.emit("player left game", null);
   }
 
+  function getTurnOrTieOrWinnerRelatedText() {
+    if (winner) {
+        if (winner === "Tie") {
+          return <h1> The game is a tie! </h1>
+        } else { // There is a winner
+          return <h1>{getPlayerText(winner)} player wins!</h1>;
+        }
+    } else { // There is no winner yet
+      return <h1> {getPlayerText(currentPlayer)} player's turn </h1>;
+    }
+  }
+
   return (
     <>
-
       {props.game.isValidGame ? null : <h1> The other player left the game! </h1>}
 
       {props.game.isValidGame ? userColorText : null}
     
-      {props.game.isValidGame && props.game.player2 !== undefined ? winnerOrPlayerTurnText : null}
+      {props.game.isValidGame && props.game.player2 !== undefined ? getTurnOrTieOrWinnerRelatedText() : null}
       
       <section id="connect-four">
         {
