@@ -41,7 +41,20 @@ function selectColorRandomly() {
     return players[random];
 }
 
-function calculateWinner(grid, currentPlayer) {
+function calculateTieOrWinner(grid, currentPlayer) {
+  // Checks for ties
+  let tieGame = true;
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < grid[0].length; j++) {
+      if (grid[i][j].includes("White")) {
+        tieGame = false;
+        break;
+      }
+    }
+    if (!tieGame) break;
+  }
+  if (tieGame) return "Tie";
+
   let winningString = "";
   for (let i = 0; i < 4; i++) {
     winningString += currentPlayer + ","
@@ -175,7 +188,7 @@ io.on("connection", socket => {
       }
 
       game.gameState.grid = nextGrid;
-      game.gameState.winner = calculateWinner(game.gameState.grid, game.gameState.currentPlayer);
+      game.gameState.winner = calculateTieOrWinner(game.gameState.grid, game.gameState.currentPlayer);
       game.gameState.currentPlayer = (game.gameState.currentPlayer === 'Red') ? 'Yellow' : 'Red';
       games[index] = game;
       io.in(game.gameCode).emit("player made move", game);

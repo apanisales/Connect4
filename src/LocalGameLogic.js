@@ -1,6 +1,19 @@
 import cloneDeep from 'lodash/cloneDeep';
 
-function calculateWinner(grid, currentPlayer) {
+function calculateTieOrWinner(grid, currentPlayer) {
+  // Checks for ties
+  let tieGame = true;
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < grid[0].length; j++) {
+      if (grid[i][j].includes("White")) {
+        tieGame = false;
+        break;
+      }
+    }
+    if (!tieGame) break;
+  }
+  if (tieGame) return "Tie";
+
   let winningString = "";
   for (let i = 0; i < 4; i++) {
     winningString += currentPlayer + ","
@@ -83,7 +96,7 @@ export function handlePlayerMove({currentPlayer, grid}, col) {
   return {
     currentPlayer: currentPlayer === 'Red' ? 'Yellow' : 'Red',
     grid: nextGrid,
-    winner: calculateWinner(nextGrid, currentPlayer)
+    winner: calculateTieOrWinner(nextGrid, currentPlayer)
   }
 }
 
