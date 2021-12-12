@@ -80,7 +80,7 @@ export default function OnlineGame(props) {
     props.socketRef.current.emit("player left game", null);
   }
 
-  function getTurnOrTieOrWinnerRelatedText(winner) {
+  function getTurnOrTieOrWinnerRelatedText() {
     if (winner) {
         if (winner === "Tie") {
           return <h1> The game is a tie! </h1>
@@ -98,7 +98,7 @@ export default function OnlineGame(props) {
 
       {props.game.isValidGame ? userColorText : null}
     
-      {props.game.isValidGame && props.game.player2 !== undefined ? getTurnOrTieOrWinnerRelatedText(winner) : null}
+      {props.game.isValidGame && props.game.player2 !== undefined ? getTurnOrTieOrWinnerRelatedText() : null}
       
       <section id="connect-four">
         {
