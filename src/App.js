@@ -2,12 +2,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import OnlineGame from './components/OnlineGame';
 import LocalGame from './components/LocalGame';
+import HowToPlayModal from './components/HowToPlayModal';
 import io from "socket.io-client";
 
 function App() {
   const [userId, setUserId] = useState();
   const [game, setGame] = useState(null);
   const socketRef = useRef();
+
+  const [showHowToPlayModal, setShowHowToPlayModal] = useState(false);
+  const handleCloseHowToPlayModal = () => setShowHowToPlayModal(false);
+  const handleShowHowToPlayModal = () => setShowHowToPlayModal(true);
 
   useEffect(() => {
     socketRef.current = io.connect('/');
@@ -48,6 +53,8 @@ function App() {
       {game !== null && !game.isOnlineGame && <LocalGame/>}
       {game === null && <button onClick={() => setGame({isOnlineGame: false})}>Play locally</button>}
       {game !== null && !game.isOnlineGame && <button onClick={() => setGame(null)}>Return to home page</button>}
+      <button id="how-to-play-button" onClick={handleShowHowToPlayModal}>How to play</button>
+      {showHowToPlayModal && <HowToPlayModal onRequestClose={handleCloseHowToPlayModal}/>}
     </>
   );
 }
