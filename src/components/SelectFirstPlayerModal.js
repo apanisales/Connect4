@@ -5,17 +5,12 @@ import Modal from "react-modal";
 Modal.setAppElement("#root");
 
 export default function SelectFirstPlayerModal(props) {
-    const [isOpen, setIsOpen] = useState(props.isOpen);
     const [selectedOption, setSelectedOption] = useState(null);
 
     function getStartingPlayerRandomly() {
         let players = ["Red", "Yellow"];
         let random = Math.floor(Math.random() * players.length);
         return players[random];
-    }
-  
-    function toggleModal() {
-        setIsOpen(!isOpen);
     }
 
     function onValueChange(event) {
@@ -28,18 +23,15 @@ export default function SelectFirstPlayerModal(props) {
         } else {
             props.selectFirstPlayer(selectedOption);
         }
-
-        setIsOpen(!isOpen);
     }
   
     return (
       <>
         <Modal
-          isOpen={isOpen}
-          onRequestClose={toggleModal}
+          isOpen={true}
           contentLabel="Modal to select the player who goes first"
-          className="select-first-player-modal"
-          overlayClassName="select-first-player-modal-overlay"
+          className="modal"
+          overlayClassName="modal-overlay"
           closeTimeoutMS={500}
           shouldCloseOnOverlayClick={false}
         >

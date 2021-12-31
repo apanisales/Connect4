@@ -119,7 +119,6 @@ export default function OnlineGame(props) {
           ))
         }
       </section>
-
       <button onClick={() => leaveGame()}>Return to home page</button>
     </>
   );

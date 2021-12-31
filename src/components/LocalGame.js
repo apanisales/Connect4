@@ -106,7 +106,6 @@ export default function LocalGame(props) {
           ))
         }
       </section>
-
       <button id="restart-button" onClick={() => restart()}>Restart game</button>
     </>
   );
