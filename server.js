@@ -65,6 +65,15 @@ function calculateTieOrWinner(grid, currentPlayer) {
   for (let row = 0; row < grid.length; row++) {
     let rowString = grid[row].toString();
     if (rowString.includes(winningString)) { // ex. rowString = White,Red,White,White,White,White,White
+      for (let i = 0; i < grid[0].length - 3; i++) {
+        let startOfWinningSequence = grid[row][i] === currentPlayer && grid[row][i + 1] === currentPlayer && grid[row][i + 2] === currentPlayer & grid[row][i + 3] === currentPlayer;
+        if (startOfWinningSequence) {
+          grid[row][i] += "WinningSequence";
+          grid[row][i + 1] += "WinningSequence";
+          grid[row][i + 2] += "WinningSequence";
+          grid[row][i + 3] += "WinningSequence";
+        }
+      }
       return currentPlayer;
     }
   }
@@ -76,6 +85,15 @@ function calculateTieOrWinner(grid, currentPlayer) {
       columnString += grid[row][col] + ",";
     }
     if (columnString.includes(winningString)) { // ex. columnString = White,Red,White,White,White,White,White,
+      for (let i = 0; i < grid[0].length - 3; i++) {
+        let startOfWinningSequence = grid[i][col] === currentPlayer && grid[i + 1][col] === currentPlayer && grid[i + 2][col] === currentPlayer & grid[i + 3][col] === currentPlayer;
+        if (startOfWinningSequence) {
+          grid[i][col] += "WinningSequence";
+          grid[i + 1][col] += "WinningSequence";
+          grid[i + 2][col] += "WinningSequence";
+          grid[i + 3][col] += "WinningSequence";
+        }
+      }
       return currentPlayer;
     }
   }
@@ -88,6 +106,10 @@ function calculateTieOrWinner(grid, currentPlayer) {
         diagonalString += grid[row + i][col + i] + ",";
       }
       if (diagonalString.includes(winningString)) { // ex. diagonalString = White,Red,White,White,
+        grid[row + 0][col + 0] += "WinningSequence";
+        grid[row + 1][col + 1] += "WinningSequence";
+        grid[row + 2][col + 2] += "WinningSequence";
+        grid[row + 3][col + 3] += "WinningSequence";
         return currentPlayer;
       }
     }
@@ -101,6 +123,10 @@ function calculateTieOrWinner(grid, currentPlayer) {
         diagonalString += grid[row + i][col - i] + ",";
       }
       if (diagonalString.includes(winningString)) { // ex. diagonalString = White,Red,White,White,
+        grid[row + 0][col - 0] += "WinningSequence";
+        grid[row + 1][col - 1] += "WinningSequence";
+        grid[row + 2][col - 2] += "WinningSequence";
+        grid[row + 3][col - 3] += "WinningSequence";
         return currentPlayer;
       }
     }
@@ -187,8 +213,8 @@ io.on("connection", socket => {
         }
       }
 
+      game.gameState.winner = calculateTieOrWinner(nextGrid, game.gameState.currentPlayer);
       game.gameState.grid = nextGrid;
-      game.gameState.winner = calculateTieOrWinner(game.gameState.grid, game.gameState.currentPlayer);
       game.gameState.currentPlayer = (game.gameState.currentPlayer === 'Red') ? 'Yellow' : 'Red';
       games[index] = game;
       io.in(game.gameCode).emit("player made move", game);

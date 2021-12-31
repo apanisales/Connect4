@@ -3,6 +3,94 @@ body {
   margin: auto;
   justify-content: center;
   text-align: center;
+  background-color: #DDDDDD;
+  font-family: 'Dekko';
+}
+
+h1,h2 {
+  color: #001f3f;
+  margin-top: 0px;
+  margin-bottom: 0.5rem;
+}
+
+.player_text[player="Yellow"] {
+  text-shadow: 0 0 2.5px black, 0 0 2.5px black;
+}
+
+.dot1 {
+  animation: dot1_animation 2s forwards infinite;
+}
+
+.dot2 {
+  animation: dot2_animation 2s forwards infinite;
+}
+
+.dot3 {
+  animation: dot3_animation 2s forwards infinite;
+}
+
+@keyframes dot1_animation {
+  0% {
+    opacity: 0;
+  }
+
+  25% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes dot2_animation {
+  0% {
+    opacity: 0;
+  }
+
+  25% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes dot3_animation {
+  0% {
+    opacity: 0;
+  }
+
+  25% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+img {
+  width: auto;
+  height: auto;
+}
+
+button {
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
 #connect-four {
@@ -42,6 +130,7 @@ body {
   border-radius: 4px;
   outline: none;
   padding: 20px;
+  max-height: 100vh;
 }
 
 .modal-overlay {
@@ -51,4 +140,38 @@ body {
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.75);
+}
+
+.title_text {
+  margin-top: 1rem;
+}
+
+.title_os {
+  display: inline-flex;
+  margin-top: 1rem;
+  white-space: nowrap;
+  overflow: hidden;  
+  animation: title_os_animation 4s steps(30,end) 2s 1 normal both;
+}
+
+@keyframes title_os_animation {
+  0% {
+    width: 0%;
+  }
+
+  25% {
+    width: 2.85rem;
+  }
+
+  50% {
+    width: 2.85rem;
+  }
+
+  75% {
+    width: 2.85rem;
+  }
+
+  100% {
+    width: 0%;
+  }
 }

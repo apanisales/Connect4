@@ -1,6 +1,7 @@
 import React from "react";
 import "../App.css";
 import Modal from "react-modal";
+import { CustomButton } from "./CustomButton";
 
 Modal.setAppElement("#root");
 
@@ -15,7 +16,7 @@ export default function HowToPlayModal(props) {
           closeTimeoutMS={500}
           shouldCloseOnOverlayClick={false}
         >
-          <div><b>How to play Connect Four</b></div>
+          <h2><b>How to play Connect 4</b></h2>
           <ul style={{textAlign: "left"}}>
             <li>Players must connect 4 of the same colored discs in a row (horizontally, vertically, or diagonally) to win</li>
             <li>Only one piece is played at a time</li>
@@ -23,7 +24,7 @@ export default function HowToPlayModal(props) {
             <li>The game ends when there is a 4-in-a-row or a stalemate</li>
             </ul>
             <div><b>Reference</b>: <a href="https://www.gamesver.com/the-rules-of-connect-4-according-to-m-bradley-hasbro/" target="_blank" rel="noreferrer noopener">The Rules of Connect 4 (According to M. Bradley & Hasbro)</a></div>
-          <button onClick={props.onRequestClose}>OK</button>
+          <CustomButton onClick={props.onRequestClose}>Continue</CustomButton>
         </Modal>
       </>
     );

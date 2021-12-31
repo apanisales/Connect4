@@ -2,6 +2,7 @@ import React, {useReducer} from 'react';
 import '../App.css';
 import { createInitialState, handlePlayerMove, highlightColumn, unHighlightColumn, checkIfColumnIsFree, setFirstPlayer} from '../LocalGameLogic.js';
 import SelectFirstPlayerModal from './SelectFirstPlayerModal';
+import { CustomButton } from "./CustomButton";
 
 const initialState = createInitialState();
 
@@ -63,18 +64,18 @@ function useConnectFour() {
 }
 
 function getPlayerText(player) {
-  return <span style={{ color: (player === "Yellow") ? "#FFD300" : player}}>{player}</span>;
+  return <span class="player_text" player={player} style={{ color: (player === "Yellow") ? "#fefe33" : player}}>{player}</span>;
 }
 
 function getTurnOrTieOrWinnerRelatedText(state) {
   if (state.winner) {
       if (state.winner === "Tie") {
-        return <h1> The game is a tie! </h1>
+        return <h2> The game is a tie! </h2>;
       } else { // There is a winner
-        return <h1>{getPlayerText(state.winner)} player wins!</h1>;
+        return <h2>{getPlayerText(state.winner)} player wins!</h2>;
       }
   } else { // There is no winner yet
-    return <h1> {getPlayerText(state.currentPlayer)} player's turn </h1>;
+    return <h2> {getPlayerText(state.currentPlayer)} player's turn </h2>;
   }
 }
 
@@ -85,7 +86,7 @@ export default function LocalGame(props) {
     <>
       {getTurnOrTieOrWinnerRelatedText(state)}
 
-      {state.currentPlayer === null && <SelectFirstPlayerModal isOpen={state.currentPlayer === null} selectFirstPlayer={selectFirstPlayer}/> }
+      {state.currentPlayer === null && <SelectFirstPlayerModal isOpen={state.currentPlayer === null} selectFirstPlayer={selectFirstPlayer}/>}
 
       <section id="connect-four">
         {
@@ -98,7 +99,7 @@ export default function LocalGame(props) {
                   onClick={() => !state.winner && checkIfColumnIsFree(state.grid, colIdx) && clickColumn(colIdx)}
                   onMouseEnter={() => !state.winner && highlightHoveredColumn(colIdx)}
                   onMouseLeave={() => !state.winner && unHighlightHoveredColumn(colIdx)}
-                  style={{backgroundColor: (state.grid[rowIdx][colIdx].includes("Hover")) ? "lightblue" : state.grid[rowIdx][colIdx]}}
+                  style={{opacity: (state.grid[rowIdx][colIdx].includes("WinningSequence")) ? 0.5 : 1, backgroundColor: (state.grid[rowIdx][colIdx].includes("Hover")) ? "lightblue" : state.grid[rowIdx][colIdx].replace("WinningSequence", "")}}
                 >
                 </span>
               ))}
@@ -106,7 +107,7 @@ export default function LocalGame(props) {
           ))
         }
       </section>
-      <button id="restart-button" onClick={() => restart()}>Restart game</button>
+      <CustomButton id="restart-button" onClick={() => restart()}>Restart game</CustomButton>
     </>
   );
 }
