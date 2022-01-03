@@ -20,7 +20,7 @@
     "web-vitals": "^1.1.1"
   },
   "scripts": {
-    "start": "concurrently \"node server.js\" \"cross-env BROWSER=chrome react-scripts start\"",
+    "start": "concurrently \"node server.js\" \"react-scripts start\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
