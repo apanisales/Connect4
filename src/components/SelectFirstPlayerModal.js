@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../App.css";
 import Modal from "react-modal";
+import { CustomButton } from "./CustomButton";
 
 Modal.setAppElement("#root");
 
@@ -69,7 +70,7 @@ export default function SelectFirstPlayerModal(props) {
                     Random
                 </label>
             </div>
-          <button onClick={submitFirstPlayer} disabled={selectedOption === null}>Continue</button>
+          <CustomButton onClick={submitFirstPlayer} disabled={selectedOption === null}>Continue</CustomButton>
         </Modal>
       </>
     );
