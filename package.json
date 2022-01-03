@@ -12,6 +12,7 @@
     "concurrently": "^6.0.2",
     "cross-env": "^7.0.3",
     "express": "^4.17.1",
+    "node-pre-gyp": "^0.17.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-modal": "^3.12.1",
