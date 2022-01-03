@@ -8,6 +8,7 @@ export default function OnlineGame(props) {
   const currentPlayer = props.game.gameState.currentPlayer;
   const winner = props.game.gameState.winner;
   const userColorText = (userColor !== null) ? <h2> You are the {getPlayerText(userColor)} player </h2> : <h2> Waiting for second player to join<span class="dot1">.</span><span class="dot2">.</span><span class="dot3">.</span></h2>;
+  let defaultCellColor = "#DDDDDD";
 
   if (grid !== props.game.gameState.grid) {
     setGrid(props.game.gameState.grid);
@@ -32,7 +33,7 @@ export default function OnlineGame(props) {
     const nextGrid = [...grid];
   
     for (let row = 5; row >= 0; row--) {
-      if (nextGrid[row][col].includes("White") && !nextGrid[row][col].includes("Hover")) {
+      if (nextGrid[row][col].includes(defaultCellColor) && !nextGrid[row][col].includes("Hover")) {
         nextGrid[row][col] += "Hover";
       }
     }
@@ -54,7 +55,7 @@ export default function OnlineGame(props) {
   
   function checkIfColumnIsFree(col) {
     for (let row = 5; row >= 0; row--) {
-      if (grid[row][col].includes("White")) {
+      if (grid[row][col].includes(defaultCellColor)) {
         return true;
       }
     }
@@ -64,7 +65,7 @@ export default function OnlineGame(props) {
   function handlePlayerMove(col) {
     const nextGrid = [...grid];  
     for (let row = 5; row >= 0; row--) {
-      if (nextGrid[row][col].includes('White')) {
+      if (nextGrid[row][col].includes(defaultCellColor)) {
         nextGrid[row][col] = currentPlayer;
         break;
       }

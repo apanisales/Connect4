@@ -1,11 +1,13 @@
 import cloneDeep from 'lodash/cloneDeep';
 
+let defaultCellColor = "#DDDDDD";
+
 function calculateTieOrWinner(grid, currentPlayer) {
   // Checks for ties
   let tieGame = true;
   for (let i = 0; i < grid.length; i++) {
     for (let j = 0; j < grid[0].length; j++) {
-      if (grid[i][j].includes("White")) {
+      if (grid[i][j].includes(defaultCellColor)) {
         tieGame = false;
         break;
       }
@@ -23,7 +25,7 @@ function calculateTieOrWinner(grid, currentPlayer) {
   // Check horizontally
   for (let row = 0; row < grid.length; row++) {
     let rowString = grid[row].toString();
-    if (rowString.includes(winningString)) { // ex. rowString = White,Red,White,White,White,White,White
+    if (rowString.includes(winningString)) { // ex. rowString = #DDDDDD,Red,#DDDDDD,#DDDDDD,#DDDDDD,#DDDDDD,#DDDDDD
       for (let i = 0; i < grid[0].length - 3; i++) {
         let startOfWinningSequence = grid[row][i] === currentPlayer && grid[row][i + 1] === currentPlayer && grid[row][i + 2] === currentPlayer & grid[row][i + 3] === currentPlayer;
         if (startOfWinningSequence) {
@@ -43,7 +45,7 @@ function calculateTieOrWinner(grid, currentPlayer) {
     for (let row = 0; row < grid.length; row++) {
       columnString += grid[row][col] + ",";
     }
-    if (columnString.includes(winningString)) { // ex. columnString = White,Red,White,White,White,White,White,
+    if (columnString.includes(winningString)) { // ex. columnString = #DDDDDD,Red,#DDDDDD,#DDDDDD,#DDDDDD,#DDDDDD,#DDDDDD,
       for (let i = 0; i < grid[0].length - 3; i++) {
         let startOfWinningSequence = grid[i][col] === currentPlayer && grid[i + 1][col] === currentPlayer && grid[i + 2][col] === currentPlayer & grid[i + 3][col] === currentPlayer;
         if (startOfWinningSequence) {
@@ -64,7 +66,7 @@ function calculateTieOrWinner(grid, currentPlayer) {
       for (let i = 0; i < 4; i++) {
         diagonalString += grid[row + i][col + i] + ",";
       }
-      if (diagonalString.includes(winningString)) { // ex. diagonalString = White,Red,White,White,
+      if (diagonalString.includes(winningString)) { // ex. diagonalString = #DDDDDD,Red,#DDDDDD,#DDDDDD,
         grid[row + 0][col + 0] += "WinningSequence";
         grid[row + 1][col + 1] += "WinningSequence";
         grid[row + 2][col + 2] += "WinningSequence";
@@ -81,7 +83,7 @@ function calculateTieOrWinner(grid, currentPlayer) {
       for (let i = 0; i < 4; i++) {
         diagonalString += grid[row + i][col - i] + ",";
       }
-      if (diagonalString.includes(winningString)) { // ex. diagonalString = White,Red,White,White,
+      if (diagonalString.includes(winningString)) { // ex. diagonalString = #DDDDDD,Red,#DDDDDD,#DDDDDD,
         grid[row + 0][col - 0] += "WinningSequence";
         grid[row + 1][col - 1] += "WinningSequence";
         grid[row + 2][col - 2] += "WinningSequence";
@@ -98,12 +100,12 @@ export function createInitialState() {
   return {
     currentPlayer: null,
     grid: [
-      ['White', 'White', 'White', 'White', 'White', 'White', 'White'],
-      ['White', 'White', 'White', 'White', 'White', 'White', 'White'],
-      ['White', 'White', 'White', 'White', 'White', 'White', 'White'],
-      ['White', 'White', 'White', 'White', 'White', 'White', 'White'],
-      ['White', 'White', 'White', 'White', 'White', 'White', 'White'],
-      ['White', 'White', 'White', 'White', 'White', 'White', 'White']
+      [defaultCellColor, defaultCellColor, defaultCellColor, defaultCellColor, defaultCellColor, defaultCellColor, defaultCellColor],
+      [defaultCellColor, defaultCellColor, defaultCellColor, defaultCellColor, defaultCellColor, defaultCellColor, defaultCellColor],
+      [defaultCellColor, defaultCellColor, defaultCellColor, defaultCellColor, defaultCellColor, defaultCellColor, defaultCellColor],
+      [defaultCellColor, defaultCellColor, defaultCellColor, defaultCellColor, defaultCellColor, defaultCellColor, defaultCellColor],
+      [defaultCellColor, defaultCellColor, defaultCellColor, defaultCellColor, defaultCellColor, defaultCellColor, defaultCellColor],
+      [defaultCellColor, defaultCellColor, defaultCellColor, defaultCellColor, defaultCellColor, defaultCellColor, defaultCellColor]
     ],
     winner: null
   }
@@ -113,7 +115,7 @@ export function handlePlayerMove({currentPlayer, grid}, col) {
   const nextGrid = cloneDeep(grid);
 
   for (let row = 5; row >= 0; row--) {
-    if (nextGrid[row][col].includes('White')) {
+    if (nextGrid[row][col].includes(defaultCellColor)) {
       nextGrid[row][col] = currentPlayer;
       break;
     }
@@ -140,7 +142,7 @@ export function highlightColumn({currentPlayer, grid, winner}, col) {
   const nextGrid = cloneDeep(grid);
 
   for (let row = 5; row >= 0; row--) {
-    if (nextGrid[row][col].includes("White") && !nextGrid[row][col].includes("Hover")) {
+    if (nextGrid[row][col].includes(defaultCellColor) && !nextGrid[row][col].includes("Hover")) {
       nextGrid[row][col] += "Hover";
     }
   }
@@ -170,7 +172,7 @@ export function unHighlightColumn({currentPlayer, grid, winner}, col) {
 
 export function checkIfColumnIsFree(grid, col) {
   for (let row = 5; row >= 0; row--) {
-    if (grid[row][col].includes("White")) {
+    if (grid[row][col].includes(defaultCellColor)) {
       return true;
     }
   }
