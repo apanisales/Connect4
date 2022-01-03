@@ -1,12 +1,14 @@
 import React, {useState} from 'react';
 import '../App.css';
+import { CustomButton } from "./CustomButton";
 
 export default function OnlineGame(props) {
   const [grid, setGrid] = useState(props.game.gameState.grid);
   const userColor = getUserColor();
   const currentPlayer = props.game.gameState.currentPlayer;
   const winner = props.game.gameState.winner;
-  const userColorText = (userColor !== null) ? <h1> You are the {getPlayerText(userColor)} player </h1> : <h1> Waiting for second player to join...</h1>;
+  const userColorText = (userColor !== null) ? <h2> You are the {getPlayerText(userColor)} player </h2> : <h2> Waiting for second player to join<span class="dot1">.</span><span class="dot2">.</span><span class="dot3">.</span></h2>;
+  let defaultCellColor = "#DDDDDD";
 
   if (grid !== props.game.gameState.grid) {
     setGrid(props.game.gameState.grid);
@@ -24,14 +26,14 @@ export default function OnlineGame(props) {
   }
 
   function getPlayerText(player) {
-    return <span style={{ color: (player === "Yellow") ? "#FFD300" : player}}>{player}</span>;
+    return <span class="player_text" player={player} style={{ color: (player === "Yellow") ? "#fefe33" : player}}>{player}</span>;
   }
   
   function highlightColumn(col) {
     const nextGrid = [...grid];
   
     for (let row = 5; row >= 0; row--) {
-      if (nextGrid[row][col].includes("White") && !nextGrid[row][col].includes("Hover")) {
+      if (nextGrid[row][col].includes(defaultCellColor) && !nextGrid[row][col].includes("Hover")) {
         nextGrid[row][col] += "Hover";
       }
     }
@@ -53,7 +55,7 @@ export default function OnlineGame(props) {
   
   function checkIfColumnIsFree(col) {
     for (let row = 5; row >= 0; row--) {
-      if (grid[row][col].includes("White")) {
+      if (grid[row][col].includes(defaultCellColor)) {
         return true;
       }
     }
@@ -63,7 +65,7 @@ export default function OnlineGame(props) {
   function handlePlayerMove(col) {
     const nextGrid = [...grid];  
     for (let row = 5; row >= 0; row--) {
-      if (nextGrid[row][col].includes('White')) {
+      if (nextGrid[row][col].includes(defaultCellColor)) {
         nextGrid[row][col] = currentPlayer;
         break;
       }
@@ -83,18 +85,18 @@ export default function OnlineGame(props) {
   function getTurnOrTieOrWinnerRelatedText() {
     if (winner) {
         if (winner === "Tie") {
-          return <h1> The game is a tie! </h1>
+          return <h2> The game is a tie! </h2>
         } else { // There is a winner
-          return <h1>{getPlayerText(winner)} player wins!</h1>;
+          return <h2>{getPlayerText(winner)} player wins!</h2>;
         }
     } else { // There is no winner yet
-      return <h1> {getPlayerText(currentPlayer)} player's turn </h1>;
+      return <h2> {getPlayerText(currentPlayer)} player's turn </h2>;
     }
   }
 
   return (
     <>
-      {props.game.isValidGame ? null : <h1> The other player left the game! </h1>}
+      {props.game.isValidGame ? null : <h2> The other player left the game! </h2>}
 
       {props.game.isValidGame ? userColorText : null}
     
@@ -111,7 +113,7 @@ export default function OnlineGame(props) {
                   onClick={() => props.game.isValidGame && props.game.player2 && currentPlayer === userColor && !winner && checkIfColumnIsFree(colIdx) && handlePlayerMove(colIdx)}
                   onMouseEnter={() => !winner && setGrid(highlightColumn(colIdx))}
                   onMouseLeave={() => !winner && setGrid(unHighlightColumn(colIdx))}
-                  style={{backgroundColor: (grid[rowIdx][colIdx].includes("Hover")) ? "lightblue" : grid[rowIdx][colIdx]}}
+                  style={{opacity: (grid[rowIdx][colIdx].includes("WinningSequence")) ? 0.5 : 1, backgroundColor: (grid[rowIdx][colIdx].includes("Hover")) ? "lightblue" : grid[rowIdx][colIdx].replace("WinningSequence", "")}}
                 >
                 </span>
               ))}
@@ -119,7 +121,7 @@ export default function OnlineGame(props) {
           ))
         }
       </section>
-      <button onClick={() => leaveGame()}>Return to home page</button>
+      <CustomButton onClick={() => leaveGame()}>Return to home page</CustomButton>
     </>
   );
 }

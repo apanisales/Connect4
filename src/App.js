@@ -4,6 +4,8 @@ import OnlineGame from './components/OnlineGame';
 import LocalGame from './components/LocalGame';
 import HowToPlayModal from './components/HowToPlayModal';
 import io from "socket.io-client";
+import homePageBoard from './HomePageBoard.PNG';
+import { CustomButton } from "./components/CustomButton";
 
 function App() {
   const [userId, setUserId] = useState();
@@ -44,16 +46,16 @@ function App() {
     });
   }
   
-
   return (
     <>
-      <h1> Connect Four</h1>
+      <h1 class='title_text'>Co<span class='title_os'>ooo</span>nnect 4</h1>
+      {game === null && <div> <img src={homePageBoard} alt="homePageBoard"/> </div>}
       {game !== null && game.isOnlineGame && <OnlineGame userId={userId} game={game} socketRef={socketRef}/>}
-      {game === null && <button onClick={() => joinOnlineGame()}>Play online</button>}
+      {game === null && <CustomButton onClick={() => joinOnlineGame()}>Play online</CustomButton>}
       {game !== null && !game.isOnlineGame && <LocalGame/>}
-      {game === null && <button onClick={() => setGame({isOnlineGame: false})}>Play locally</button>}
-      {game !== null && !game.isOnlineGame && <button onClick={() => setGame(null)}>Return to home page</button>}
-      <button id="how-to-play-button" onClick={handleShowHowToPlayModal}>How to play</button>
+      {game === null && <CustomButton onClick={() => setGame({isOnlineGame: false})}>Play locally</CustomButton>}
+      {game !== null && !game.isOnlineGame && <CustomButton onClick={() => setGame(null)}>Return to home page</CustomButton>}
+      <CustomButton id="how-to-play-button" onClick={handleShowHowToPlayModal}>How to play</CustomButton>
       {showHowToPlayModal && <HowToPlayModal onRequestClose={handleCloseHowToPlayModal}/>}
     </>
   );
