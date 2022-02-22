@@ -7,7 +7,7 @@ export default function OnlineGame(props) {
   const playerColor = getPlayerColor();
   const currentPlayer = props.game.gameState.currentPlayer;
   const winner = props.game.gameState.winner;
-  const playerColorText = (playerColor !== null) ? <h2 class='game_text'> You are the {getPlayerText(playerColor)} player </h2> : <h2 class='game_text'> Waiting for second player to join<span class="dot1">.</span><span class="dot2">.</span><span class="dot3">.</span></h2>;
+  const playerColorText = (playerColor !== null) ? <h2 class='game_text'>You are the {getPlayerText(playerColor)} player. </h2> : <h2 class='game_text'> Waiting for second player to join<span class="dot1">.</span><span class="dot2">.</span><span class="dot3">.</span></h2>;
   let defaultCellColor = "#DDDDDD";
 
   if (grid !== props.game.gameState.grid) {
@@ -85,12 +85,12 @@ export default function OnlineGame(props) {
   function getTurnOrTieOrWinnerRelatedText() {
     if (winner) {
         if (winner === "Tie") {
-          return <h2 class='game_text'>. The game is a tie! </h2>
+          return <h2 class='game_text'>The game is a tie!</h2>
         } else { // There is a winner
-          return <h2 class='game_text'>. The {getPlayerText(winner)} player wins!</h2>;
+          return <h2 class='game_text'>The {getPlayerText(winner)} player wins!</h2>;
         }
     } else { // There is no winner yet
-      return <h2 class='game_text'>. It is now the {getPlayerText(currentPlayer)} player's turn.</h2>;
+      return <h2 class='game_text'>It is now the {getPlayerText(currentPlayer)} player's turn.</h2>;
     }
   }
 
