@@ -23,7 +23,6 @@ export default function HowToPlayModal(props) {
             <li>Players can be on the offensive or defensive</li>
             <li>The game ends when there is a 4-in-a-row or a stalemate</li>
             </ul>
-            <div><b>Reference</b>: <a href="https://www.gamesver.com/the-rules-of-connect-4-according-to-m-bradley-hasbro/" target="_blank" rel="noreferrer noopener">The Rules of Connect 4 (According to M. Bradley & Hasbro)</a></div>
           <CustomButton onClick={props.onRequestClose}>Continue</CustomButton>
         </Modal>
       </>
