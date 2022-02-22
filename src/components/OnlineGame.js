@@ -4,17 +4,17 @@ import { CustomButton } from "./CustomButton";
 
 export default function OnlineGame(props) {
   const [grid, setGrid] = useState(props.game.gameState.grid);
-  const userColor = getUserColor();
+  const playerColor = getPlayerColor();
   const currentPlayer = props.game.gameState.currentPlayer;
   const winner = props.game.gameState.winner;
-  const userColorText = (userColor !== null) ? <h2> You are the {getPlayerText(userColor)} player </h2> : <h2> Waiting for second player to join<span class="dot1">.</span><span class="dot2">.</span><span class="dot3">.</span></h2>;
+  const playerColorText = (playerColor !== null) ? <h2 class='game_text'> You are the {getPlayerText(playerColor)} player </h2> : <h2 class='game_text'> Waiting for second player to join<span class="dot1">.</span><span class="dot2">.</span><span class="dot3">.</span></h2>;
   let defaultCellColor = "#DDDDDD";
 
   if (grid !== props.game.gameState.grid) {
     setGrid(props.game.gameState.grid);
   }
 
-  function getUserColor() {
+  function getPlayerColor() {
     if (props.game.player2 !== undefined) {
       if (props.userId === props.game.player1) {
         return props.game.player1Color;
@@ -85,12 +85,12 @@ export default function OnlineGame(props) {
   function getTurnOrTieOrWinnerRelatedText() {
     if (winner) {
         if (winner === "Tie") {
-          return <h2> The game is a tie! </h2>
+          return <h2 class='game_text'>. The game is a tie! </h2>
         } else { // There is a winner
-          return <h2>{getPlayerText(winner)} player wins!</h2>;
+          return <h2 class='game_text'>. The {getPlayerText(winner)} player wins!</h2>;
         }
     } else { // There is no winner yet
-      return <h2> {getPlayerText(currentPlayer)} player's turn </h2>;
+      return <h2 class='game_text'>. It is now the {getPlayerText(currentPlayer)} player's turn.</h2>;
     }
   }
 
@@ -98,7 +98,7 @@ export default function OnlineGame(props) {
     <>
       {props.game.isValidGame ? null : <h2> The other player left the game! </h2>}
 
-      {props.game.isValidGame ? userColorText : null}
+      {props.game.isValidGame ? playerColorText : null}
     
       {props.game.isValidGame && props.game.player2 !== undefined ? getTurnOrTieOrWinnerRelatedText() : null}
       
@@ -110,7 +110,7 @@ export default function OnlineGame(props) {
                 <span
                   className="cell"
                   key={colIdx}
-                  onClick={() => props.game.isValidGame && props.game.player2 && currentPlayer === userColor && !winner && checkIfColumnIsFree(colIdx) && handlePlayerMove(colIdx)}
+                  onClick={() => props.game.isValidGame && props.game.player2 && currentPlayer === playerColor && !winner && checkIfColumnIsFree(colIdx) && handlePlayerMove(colIdx)}
                   onMouseEnter={() => !winner && setGrid(highlightColumn(colIdx))}
                   onMouseLeave={() => !winner && setGrid(unHighlightColumn(colIdx))}
                   style={{opacity: (grid[rowIdx][colIdx].includes("WinningSequence")) ? 0.5 : 1, backgroundColor: (grid[rowIdx][colIdx].includes("Hover")) ? "lightblue" : grid[rowIdx][colIdx].replace("WinningSequence", "")}}

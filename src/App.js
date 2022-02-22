@@ -48,7 +48,7 @@ function App() {
   
   return (
     <>
-      <h1 class='title_text'>Co<span class='title_os'>ooo</span>nnect 4</h1>
+      <h1 class='title_text'>Connect 4</h1>
       {game === null && <div> <img src={homePageBoard} alt="homePageBoard"/> </div>}
       {game !== null && game.isOnlineGame && <OnlineGame userId={userId} game={game} socketRef={socketRef}/>}
       {game === null && <CustomButton onClick={() => joinOnlineGame()}>Play online</CustomButton>}

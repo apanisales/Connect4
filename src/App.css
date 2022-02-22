@@ -146,32 +146,6 @@ button {
   margin-top: 1rem;
 }
 
-.title_os {
-  display: inline-flex;
-  margin-top: 1rem;
-  white-space: nowrap;
-  overflow: hidden;  
-  animation: title_os_animation 4s steps(30,end) 2s 1 normal both;
-}
-
-@keyframes title_os_animation {
-  0% {
-    width: 0%;
-  }
-
-  25% {
-    width: 3.5rem;
-  }
-
-  50% {
-    width: 3.5rem;
-  }
-
-  75% {
-    width: 3.5rem;
-  }
-
-  100% {
-    width: 0%;
-  }
+.game_text {
+  display:inline-block;
 }
