@@ -2,7 +2,7 @@
 
 [Connect 4](https://connect004.herokuapp.com/) is a website where users can play the game of the same name online or locally.
 
-![Connect 4 Home Page](/my-app/src/connect4HomePage.PNG)
+![Connect 4 Home Page](/src/images/Connect4HomePage.PNG)
 
 ## Usage
 
