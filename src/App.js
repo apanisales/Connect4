@@ -4,7 +4,7 @@ import OnlineGame from './components/OnlineGame';
 import LocalGame from './components/LocalGame';
 import HowToPlayModal from './components/HowToPlayModal';
 import io from "socket.io-client";
-import homePageBoard from './HomePageBoard.PNG';
+import homePageBoard from './images/HomePageBoard.PNG';
 import { CustomButton } from "./components/CustomButton";
 
 function App() {
