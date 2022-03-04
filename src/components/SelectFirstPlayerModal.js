@@ -36,7 +36,7 @@ export default function SelectFirstPlayerModal(props) {
           closeTimeoutMS={500}
           shouldCloseOnOverlayClick={false}
         >
-          <h3><b>Select the Player who goes first</b></h3>
+          <h3><b>Select the player who goes first</b></h3>
           <div className="radio">
                 <label>
                     <input
