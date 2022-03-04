@@ -78,7 +78,7 @@ function getTurnOrTieOrWinnerRelatedText(state) {
     if (state.currentPlayer === null) { // The first player has not been selected yet
       return null;
     } else {
-      return <h2>It is the {getPlayerText(state.currentPlayer)} player's turn.</h2>;
+      return <h2>It is now the {getPlayerText(state.currentPlayer)} player's turn.</h2>;
     }
   }
 }
