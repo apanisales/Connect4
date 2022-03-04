@@ -7,7 +7,7 @@ export default function OnlineGame(props) {
   const playerColor = getPlayerColor();
   const currentPlayer = props.game.gameState.currentPlayer;
   const winner = props.game.gameState.winner;
-  const playerColorText = (playerColor !== null) ? <h2 class='game_text'>You are the {getPlayerText(playerColor)} player.&nbsp;</h2> : <h2 class='game_text'> Waiting for second player to join<span class="dot1">.</span><span class="dot2">.</span><span class="dot3">.</span></h2>;
+  const playerColorText = (playerColor !== null) ? <h2 class='game_text'>You are the {getPlayerText(playerColor)} player.&nbsp;</h2> : <h2 class='game_text'> Waiting for a second player to join<span class="dot1">.</span><span class="dot2">.</span><span class="dot3">.</span></h2>;
   let defaultCellColor = "#DDDDDD";
 
   if (grid !== props.game.gameState.grid) {
