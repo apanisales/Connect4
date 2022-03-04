@@ -70,12 +70,16 @@ function getPlayerText(player) {
 function getTurnOrTieOrWinnerRelatedText(state) {
   if (state.winner) {
       if (state.winner === "Tie") {
-        return <h2> The game is a tie! </h2>;
+        return <h2>The game is a tie!</h2>;
       } else { // There is a winner
-        return <h2>{getPlayerText(state.winner)} player wins!</h2>;
+        return <h2>The {getPlayerText(state.winner)} player wins!</h2>;
       }
   } else { // There is no winner yet
-    return <h2> {getPlayerText(state.currentPlayer)} player's turn </h2>;
+    if (state.currentPlayer === null) { // The first player has not been selected yet
+      return null;
+    } else {
+      return <h2>It is the {getPlayerText(state.currentPlayer)} player's turn.</h2>;
+    }
   }
 }
 
